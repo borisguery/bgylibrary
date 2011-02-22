@@ -56,7 +56,7 @@ require_once 'Zend/Json.php';
 class Bgy_Service_Geonames
 {
 
-    const API_URI = 'http://ws.geonames.org';
+    const API_URI = 'http://api.geonames.org';
 
     /**
      * Supported methods
