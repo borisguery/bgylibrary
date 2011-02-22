@@ -8,10 +8,12 @@ class Bgy_Filter_HotWord implements Zend_Filter_Interface
     public function filter($value)
     {
         usort($this->_keywords, function($a,$b){return(strlen($a)<strlen($b));});
+        $wrapper = explode('%string%', $this->_wrapper);
+        $wrapper = array_map(function($a) { return addcslashes($a, '<>/="\'-()[]^*.$: ');}, $wrapper);
 
         foreach ($this->_keywords as $keyword) {
             $value = preg_replace(
-                '/((?<!\<strong\>)('.$keyword.'\b)(?!\<\/strong\>))/i',
+                '/((?<!'.$wrapper[0].')('.$keyword.'\b)(?!'.$wrapper[1].'))/i',
                 str_replace('%string%', '\2', $this->_wrapper) . '\3',
                 $value
             );
