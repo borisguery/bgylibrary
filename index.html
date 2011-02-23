@@ -41,7 +41,8 @@ a Zend Framework 1.1x project.</p>
  <span class="class code boc-nogutter language-php"><code>\Doctrine\ORM\EntityManager</code></span>.</p>
 <p>You can use it to configure your application or the command line tools provided by Doctrine.</p>
 <h4>Configuration</h4>
-<p>Here is a sample application.ini with available options</p>
+<p>Here is a sample <span class="filename code boc-nogutter language-plain"><code>application.ini</code></span> 
+ with available options</p>
 <pre><code class="brush: ini; code language-ini">
 [production]
 pluginpaths.Bgy_Application_Resource = "Bgy/Application/Resource" ; Add custom resource
@@ -70,6 +71,25 @@ resources.doctrine2.proxy.autoGenerateClasses = true
 <p>Some options are mandatory while others are optional, please refer to the 
  <a href="http://www.doctrine-project.org/docs/orm/2.0/en/reference/configuration.html">Doctrine 
 2 manual.</a></p>
+
+<p>In order to use the autoloader, you need to register the 
+<span class="class code boc-nogutter language-php"><code>Doctrine</code></span> namespace.
+<br />
+In your <span class="filename code boc-nogutter language-plain"><code>application.ini</code></span>:
+</p>
+<pre><code class="brush: php; code language-php">
+autoloaderNamespaces[] = "Doctrine"
+</code></pre>
+<p class="note"><em>Note:</em> You don't need to append '_' (underscore) to the 
+ pseudo-namespace because Doctrine actually use PHP 5.3 namespace.
+</p>
+<p>Be sure to set up your include path accordingly to your project.<br />
+ The most convenient way is to place <span class="filename code boc-nogutter language-plain"><code>Doctrine/ORM</code></span>, 
+ <span class="filename code boc-nogutter language-plain"><code>Doctrine/Common</code></span>, 
+ <span class="filename code boc-nogutter language-plain"><code>Doctrine/DBAL</code></span> and
+ <span class="filename code boc-nogutter language-plain"><code>Symfony/*</code></span> 
+ under <span class="filename code boc-nogutter language-plain"><code>library/</code></span>.
+
 <h4>Usage</h4>
 <h5>In your web application</h5>
 <pre><code class="brush: php; code language-php">
@@ -79,8 +99,9 @@ if ($bootstrap->hasResource('doctrine2')) {
     $em = $doctrine2Resource->getEntityManager();
 }
 </code></pre>
-<p>You can now store the <span class="class">EntityManager</span> in the 
- <span class="class">Registry</span>, or use it through a <span class="class">Service</span>.
+<p>You can now store the <span class="class code boc-nogutter language-php"><code>EntityManager</code></span> in the 
+ <span class="class code boc-nogutter language-php"><code>Registry</code></span>, 
+ or use it through a <span class="class code boc-nogutter language-php"><code>Service</code></span>.
 
 <h5>In doctrine-cli-config.php</h5>
 <pre><code class="brush: php; code language-php">
@@ -104,7 +125,7 @@ $GLOBALS['helperSet'] = new \Symfony\Component\Console\Helper\HelperSet(
     )
 );
 </code></pre>
-<p>Change the path of the config file in the <span class="filename">doctrine.php</span> cli scripts :</p>
+<p>Change the path of the config file in the <span class="filename code boc-nogutter language-plain"><code>doctrine.php</code></span> cli scripts :</p>
 <pre><code class="brush: php; code language-php">
 $configFile = getcwd() . DIRECTORY_SEPARATOR . 'configs/doctrine-cli-config.php';
 </code></pre>
@@ -127,7 +148,7 @@ Basicly, this plugin check for an XHR request, and set a defaut format (default 
 However, you can still override the format parameter when necessary.</p>
 
 <h4>Configuration</h4>
-<p>In your <span class="filename">Bootstrap.php</span>, place the following code:</p>
+<p>In your <span class="filename code boc-nogutter language-plain"><code>Bootstrap.php</code></span>, place the following code:</p>
 <pre><code class="brush: php; code language-php">
 protected function _initPlugins()
 {
@@ -225,7 +246,7 @@ matches a shorter and similar keywords. <br />Look at the
 $options = array(
     'separator' => '~',     // default to '-' (dash)
     'lowercase' => false,   // default to true
-    'maxlength' => 128,     // default to null (no maxlength)
+    'maxlength' => 35,     // default to null (no maxlength)
 );
 </code></pre>
 <p>You can either provide, an array, a Zend_Config object or function arguments 
@@ -234,18 +255,18 @@ in the same given order.
 Example:
 </p>
 <pre><code class="brush: php; code language-php">
-$filter = new Bgy_Filter_Slugify('-', false, 20);
+$filter = new Bgy_Filter_Slugify('~', false, 35);
 </code></pre>
 
 <h4>Usage</h4>
 <p>Using the previous configuration, the filtered value returns:</p>
 <pre><code class="brush: php; code language-php">
-$value = 'http://BorisGuery.GithuB.com/BgyLibrary/';
+$value = 'http://ßorisGuéry.GithüB.com/BgyLibräry/';
 echo $filter->filter($value);
 
-// returns 
+// returns (note the (ß) Eszett and others accented charaters)
 
-'http~BorisGuery~Gith'
+'http~ssorisGuery~GithuB~com~BgyLibr'
 </code></pre>
 
 <p class="note"><em>Note:</em> The length is computed <strong>after</strong> the string 
@@ -382,9 +403,9 @@ array
  date/time string from a given Zend_Date object.</p>
  
 <h4>Configuration</h4>
-<p>First you need to set up your <span class="class">View</span> object to 
+<p>First you need to set up your <span class="class code boc-nogutter language-php"><code>View</code></span> object to 
 use your custom View Helper. <br />
-Somewhere in your <span class="filename">Bootstrap.php</span>:
+Somewhere in your <span class="filename code boc-nogutter language-plain"><code>Bootstrap.php</code></span>:
 </p>
 
 <pre><code class="brush: php; code language-php">
@@ -495,6 +516,7 @@ by running:</p>
     var disqus_shortname = 'borisgueryassembly';
     var disqus_identifier = 'bgylibrary';
     var disqus_url = 'http://borisguery.github.com/bgylibrary';
+    var disqus_developer = 1;
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
         dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
