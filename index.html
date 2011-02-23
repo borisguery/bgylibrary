@@ -458,13 +458,23 @@ by running:</p>
 <script type="text/javascript">
 $(document).ready(function() {
       $.beautyOfCode.init({
-          //scripts: 'scripts/syntaxhighlighter/',
           brushes: ['Plain', 'Php', 'Xml'],
           ready: function() {
-              $.beautyOfCode.utils.loadScript('http://sandbox.dev/SyntaxHighlighter/shBrushIni.js', function(){$.beautyOfCode.beautifyAll();});
+              $.beautyOfCode.utils.loadScript('scripts/syntaxhighlighter/shBrushIni.js', function(){$.beautyOfCode.beautifyAll();});
           }
       });
   });
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-21610741-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
 </script>
 </body>
 </html>
