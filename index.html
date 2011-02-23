@@ -22,8 +22,11 @@ Guéry</a></span></h1>
 <h2>Dependencies</h2>
 <p>Zend Framework 1.1x</p>
 <h2>Install</h2>
-<p>Move Bgy/ into your library/ folder</p>
-<p>Register Bgy_ namespace to your autoloader</p>
+<p>Move <span class="filename code boc-nogutter language-plain"><code>Bgy/</code></span> 
+ into your <span class="filename code boc-nogutter language-plain"><code>library/</code></span> 
+ folder</p>
+<p>Register <span class="class code boc-nogutter language-php"><code>Bgy_</code></span> 
+ namespace to your autoloader</p>
 <pre><code class="brush: ini; code language-ini">
 autoloaderNamespaces[] = "Bgy_"
 </code></pre>
@@ -32,9 +35,11 @@ autoloaderNamespaces[] = "Bgy_"
 <h4>Overview</h4>
 <p>This resource aims to provide a easy way to configure and use Doctrine 2 within 
 a Zend Framework 1.1x project.</p>
-<p>It allows you to retrieve a <span class="class">Doctrine\ORM\Configuration</span> object and/or an instance of 
- <span class="class">\Doctrine\ORM\EntityManager</span>.</p>
-<p>You use it to configure your application or the command line tools provided by Doctrine.</p>
+<p>It allows you to retrieve a 
+ <span class="class code boc-nogutter language-php"><code>Doctrine\ORM\Configuration</code></span> 
+ object and/or an instance of 
+ <span class="class code boc-nogutter language-php"><code>\Doctrine\ORM\EntityManager</code></span>.</p>
+<p>You can use it to configure your application or the command line tools provided by Doctrine.</p>
 <h4>Configuration</h4>
 <p>Here is a sample application.ini with available options</p>
 <pre><code class="brush: ini; code language-ini">
@@ -450,6 +455,21 @@ by running:</p>
 <div class="footer">get the source code on GitHub : <a
   href="http://github.com/borisguery/bgylibrary">borisguery/bgylibrary</a>
 </div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'borisgueryassembly';
+    var disqus_identifier = 'bgylibrary';
+    var disqus_url = 'http://borisguery.github.com/bgylibrary';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
 
 </div>
 
