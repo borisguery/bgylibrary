@@ -30,55 +30,308 @@ autoloaderNamespaces[] = "Bgy_"
 <h2>Components</h2>
 <h3>Bgy_Application_Resource_Doctrine2</h3>
 <h4>Overview</h4>
+<p>This resource aims to provide a easy way to configure and use Doctrine 2 within 
+a Zend Framework 1.1x project.</p>
+<p>It allows you to retrieve a <span class="class">Doctrine\ORM\Configuration</span> object and/or an instance of 
+ <span class="class">\Doctrine\ORM\EntityManager</span>.</p>
+<p>You use it to configure your application or the command line tools provided by Doctrine.</p>
 <h4>Configuration</h4>
 <p>Here is a sample application.ini with available options</p>
 <pre><code class="brush: ini; code language-ini">
 [production]
-phpSettings.display_startup_errors = 0
-phpSettings.display_errors = 0
-includePaths.library = APPLICATION_PATH "/../library"
-bootstrap.path = APPLICATION_PATH "/Bootstrap.php"
-bootstrap.class = "Bootstrap"
-
-[testing : production]
-phpSettings.display_startup_errors = 1
-phpSettings.display_errors = 1
+pluginpaths.Bgy_Application_Resource = "Bgy/Application/Resource" ; Add custom resource
+resources.doctrine2.proxy.dir = APPLICATION_PATH "/proxies"
+resources.doctrine2.proxy.autoGenerateClasses = false
+resources.doctrine2.proxy.namespace = "\App\Models\Proxies"
+resources.doctrine2.metadata.driver = "annotation"
+resources.doctrine2.metadata.paths[] = APPLICATION_PATH "/models/Entities/"
+resources.doctrine2.cache.result = "\Doctrine\Common\Cache\ArrayCache"
+resources.doctrine2.cache.query = "\Doctrine\Common\Cache\ArrayCache"
+resources.doctrine2.cache.metadata = "\Doctrine\Common\Cache\ArrayCache"
+resources.doctrine2.options.useCExtention = false
+resources.doctrine2.options.sqlLogger = "\Doctrine\DBAL\Logging\EchoSQLLogger"
+resources.doctrine2.params.driver = "pdo_mysql"
+resources.doctrine2.params.dbname = "bgy"
+resources.doctrine2.params.host = "127.0.0.1"
+resources.doctrine2.params.port = 3306
+resources.doctrine2.params.user = "root"
+resources.doctrine2.params.password = ""
+resources.doctrine2.hydrators.customHydrator = "\Doctrine\ORM\Internal\Hydration\ObjectHydrator"
+resources.doctrine2.types.datetime = "Bgy\DBAL\Types\DateTimeType"
 
 [development : production]
-phpSettings.display_startup_errors = 1
-phpSettings.display_errors = 1
-phpSettings.xdebug.show_exception_trace = on
-phpSettings.xdebug.show_local_vars = on
-phpSettings.xdebug.var_display_max_depth = 6
-phpSettings.html_errors = on
-resources.frontController.params.displayExceptions = 1
+resources.doctrine2.proxy.autoGenerateClasses = true
 </code></pre>
+<p>Some options are mandatory while others are optional, please refer to the 
+ <a href="http://www.doctrine-project.org/docs/orm/2.0/en/reference/configuration.html">Doctrine 
+2 manual.</a></p>
 <h4>Usage</h4>
+<h5>In your web application</h5>
+<pre><code class="brush: php; code language-php">
+$bootstrap = $this->getInvokeArg('bootstrap');
+if ($bootstrap->hasResource('doctrine2')) {
+    $doctrine2Resource = $bootstrap->getResource('doctrine2');
+    $em = $doctrine2Resource->getEntityManager();
+}
+</code></pre>
+<p>You can now store the <span class="class">EntityManager</span> in the 
+ <span class="class">Registry</span>, or use it through a <span class="class">Service</span>.
 
-<h3>Bgy_Application_Resource_Doctrine2</h3>
-<h4>Overview</h4>
-<h4>Configuration</h4>
-<h4>Usage</h4>
+<h5>In doctrine-cli-config.php</h5>
+<pre><code class="brush: php; code language-php">
+// Include paths, require, constants definition, etc.
+$application = new Zend_Application(
+    APPLICATION_ENV,
+    APPLICATION_PATH . '/configs/application.ini'
+);
+
+$application->getBootstrap()
+    ->bootstrap(array('doctrine2'));
+
+$em = $application->getBootstrap()
+    ->getResource('doctrine2')
+    ->getEntityManager();
+
+$GLOBALS['helperSet'] = new \Symfony\Component\Console\Helper\HelperSet(
+    array(
+        'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($em->getConnection()),
+        'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em)
+    )
+);
+</code></pre>
+<p>Change the path of the config file in the <span class="filename">doctrine.php</span> cli scripts :</p>
+<pre><code class="brush: php; code language-php">
+$configFile = getcwd() . DIRECTORY_SEPARATOR . 'configs/doctrine-cli-config.php';
+</code></pre>
 
 <h3>Bgy_Controller_Plugin_AjaxContextDefaultFormat</h3>
 <h4>Overview</h4>
+<p>This plugin allows you to define a defaut format when using the AjaxContext View Helper.<br />
+<p>When using AjaxContext, you need to specify a format to tell the controller which view to return.<br />
+<br />For example, in a view script:</p>
+<pre><code class="brush: php; code language-php">
+$this->url(array(
+    'controller' => 'index',
+    'action'     => 'delete',
+    'id'         => 1,
+    'format'     => 'json',    
+), null, true);
+</code></pre>
+<p>Zend doesn't check for an Ajax request, instead it uses the format parameter.<br />
+Basicly, this plugin check for an XHR request, and set a defaut format (default to 'JSON').<br />
+However, you can still override the format parameter when necessary.</p>
+
 <h4>Configuration</h4>
+<p>In your <span class="filename">Bootstrap.php</span>, place the following code:</p>
+<pre><code class="brush: php; code language-php">
+protected function _initPlugins()
+{
+    $this->bootstrap('frontController');
+    $front = $this->getResource('frontController');
+    $front->registerPlugin(new Bgy_Controller_Plugin_AjaxContextDefaultFormat('json'));
+}
+</code></pre>
+<p>If you don't provide a default format, JSON is used.</p>
+
 <h4>Usage</h4>
+<p>None</p>
 
 <h3>Bgy_Filter_Scheme_Http</h3>
 <h4>Overview</h4>
+<p>Bgy_Filter_Scheme_Http prepends the <span class="code">http://</span> scheme to 
+a given string. <br />It replaces the current scheme if it is already present 
+ and/or malformed before to prepend</p>
 <h4>Configuration</h4>
+<p>There is no configuration for this extension</p>
 <h4>Usage</h4>
+<pre><code class="brush: php; code language-php">
+$urls = array(
+    'borisguery.com',
+    'http://borisguery.com',
+    'ftp://borisguery.com',
+    'htp://borisguery.com',
+    'http:/borisguery.com',
+    'http:borisguery.com',
+);
+$filter = new Bgy_Filter_Scheme_Http();
+foreach ($urls as $url) {
+    var_dump($filter->filter($url));
+}
+</code></pre>
+<p>All <span class="variable">$url</span> return <span class="string">http://borisguery.com</span></p>
+
+<p>However, the following example returns 'http://httpborisguery.com' because
+ it has no way to determine if 'http' is part of the domain or not</p>
+<pre><code class="brush: php; code language-php">
+$filter->filter('httpborisguery.com');
+</code></pre>
 
 <h3>Bgy_Filter_HotWord</h3>
 <h4>Overview</h4>
+<p>The main goal of this filter is to wrap a keyword into an html element.</p> 
 <h4>Configuration</h4>
+<pre><code class="brush: php; code language-php">
+$filter = new Bgy_Filter_HotWord();
+$filter->setKeywords(array(
+    'consectetur',
+    'rhoncus commodo',
+    'sollicitudin',
+    'dapibus',
+    'rhoncus',
+));
+$filter->setWrapper('<strong>%string%</strong>');
+</code></pre>
+
 <h4>Usage</h4>
+<p>Using the previous configuration, let's say we have the following text:</p>
+<pre><code class="brush: php; code language-php">
+$text = 'Lorem ipsum dolor sit amet, consectetur rhoncus adipiscing elit. '
+ . 'Vestibulum dapibus tortor rhoncus rhoncus commodo fermentum erat gravida '
+ . 'sollicitudin. Ut magna diam, tincidunt ac dapibus id, placerat at arcu. '
+ . 'Mauris a sapien sit amet risus auctor venenatis et consequat urna. '
+ . 'Pellentesque orci erat, gravida vitae rhoncus commodo, laoreet in ipsum. ';
+</code></pre>
+
+<p>The filtered text will looks like this:</p>
+<pre><code class="brush: html; code language-html">
+Lorem ipsum dolor sit amet, <strong>consectetur</strong> <strong>rhoncus</strong>
+ adipiscing elit. Vestibulum <strong>dapibus</strong> tortor 
+ <strong>rhoncus</strong> <strong>rhoncus commodo</strong> fermentum erat 
+ gravida <strong>sollicitudin</strong>. Ut magna diam, tincidunt ac 
+ <strong>dapibus</strong> id, placerat at arcu. Mauris a sapien sit amet 
+ risus auctor venenatis et consequat urna. Pellentesque orci erat, gravida 
+ vitae <strong>rhoncus commodo</strong>, laoreet in ipsum. 
+</code></pre>
+<p class="note"><em>Note:</em> Keywords can be either a word or a word sequence.
+The longest word sequence found will be used first, and won't be wrapped twice if it 
+matches a shorter and similar keywords. <br />Look at the 
+<span class="keyword">rhoncus</span> and <span class="keyword">rhoncus commodo</span> keywords for an example.
+</p>
+
 
 <h3>Bgy_Service_Geonames</h3>
 <h4>Overview</h4>
+<p>Geonames is a geographical database and webservice free of charge under a 
+ creative commons attribution license. To know more about Geonames, visit their 
+ <a href="http://www.geonames.org/about.html">website</a>.<p>
+<p>Bgy_Service_Geonames is a webservice wrapper which respects the Zend Framework</p>
 <h4>Configuration</h4>
+<p class="note"><em>Note:</em> According to this 
+<a href="http://geonames.wordpress.com/2011/01/28/application-identification-for-free-geonames-web-services/">announcement</a>
+the username is now mandatory (if you use the new URI: api.geonames.org)</p>
+<p>To configure your username and token, you can pass an array, or an instance of 
+<span class="class code boc-nogutter language-php"><code>Zend_Config</code></span> 
+ to the constructor: </p>
+<pre><code class="brush: php; code language-php">
+$options = array(
+    'username' => 'borisguery',
+    'token'    => 'abcdef0123456789'
+);
+$g = new Bgy_Service_Geonames($options);
+</code></pre>
+Alternatively you can set both with their respective setters:
+<pre><code class="brush: php; code language-php">
+$g = new Bgy_Service_Geonames();
+$g->setUsername('borisguery')
+    ->setToken('abcdef0123456789');
+</code></pre>
 <h4>Usage</h4>
+<p>Most of <a href="http://www.geonames.org/export/ws-overview.html">the methods</a>
+ provided by the Geonames webservices are available.<br /><br />
+The following static method returns a complete list of the supported methods:
+ </p>
+<pre><code class="brush: php; code language-php">
+Bgy_Service_Geonames::getAvailableMethods();
+</code></pre>
+
+<p><span class="class code boc-nogutter language-php"><code>Bgy_Service_Geonames</code></span>
+uses the magic method <span class="class code boc-nogutter language-php"><code>__call()</code></span>
+ therefore all methods have the same signature.</p>
+<pre><code class="brush: php; code language-php">
+/**
+ * @method array postalCodeCountryInfo()      postalCodeCountryInfo(array $params)
+ * @method array postalCodeLookup()           postalCodeLookup(array $params)
+ */
+</code></pre>
+
+<p>For a complete list of the available and mandatory parameters, see the
+<a href="http://www.geonames.org/export/web-services.html">Geonames webservice manual</a>.
+</p>
+
+<p>Errors are also handled by the wrapper, and throw a 
+<span class="class code boc-nogutter language-php"><code>Bgy_Service_Geonames_Exception</code></span>
+with the message returned by the webservice.<br />
+See the <a href="http://www.geonames.org/export/webservice-exception.html">manual</a> for a description of the errors.</p>
+
+<h5>Examples</h5>
+<p>Retrieve informations for a given postal code</p>
+<pre><code class="brush: php; code language-php">
+$result = $g->postalCodeLookup(
+    array(
+      'postalcode' => '13100',
+      'country'    => 'FR',
+      'maxRows'    => 1,
+    )
+);
+
+// returns
+
+array
+  0 => 
+    array
+      'adminCode3' => string '131' (length=3)
+      'adminName2' => string 'Bouches-du-Rhône' (length=17)
+      'adminName3' => string 'Arrondissement d'Aix-en-Provence' (length=32)
+      'adminCode2' => string '13' (length=2)
+      'postalcode' => string '13100' (length=5)
+      'adminCode1' => string 'B8' (length=2)
+      'countryCode' => string 'FR' (length=2)
+      'lng' => float 5.55
+      'placeName' => string 'Beaurecueil' (length=11)
+      'lat' => float 43.5
+      'adminName1' => string 'Provence-Alpes-Côte d'Azur' (length=27)
+</code></pre>
+
+<p>Retrieve informations for a given postal code</p>
+<pre><code class="brush: php; code language-php">
+$result  = $g->findNearbyPlaceName(
+    array(
+      'lng'     => 5.55,
+      'lat'     => 43.5,
+      'lang'    => 'FR',
+      'style'   => 'short',
+      'maxRows' => 2,
+      'radius'  => 10,
+    )
+);
+
+// returns
+
+array
+  0 => 
+    array
+      'distance' => string '1.36754' (length=7)
+      'toponymName' => string 'Beaurecueil' (length=11)
+      'fcl' => string 'P' (length=1)
+      'name' => string 'Beaurecueil' (length=11)
+      'countryCode' => string 'FR' (length=2)
+      'lng' => float 5.5456924438477
+      'fcode' => string 'PPL' (length=3)
+      'geonameId' => int 3034099
+      'lat' => float 43.511895697594
+  1 => 
+    array
+      'distance' => string '1.94964' (length=7)
+      'toponymName' => string 'Châteauneuf-le-Rouge' (length=21)
+      'fcl' => string 'P' (length=1)
+      'name' => string 'Châteauneuf-le-Rouge' (length=21)
+      'countryCode' => string 'FR' (length=2)
+      'lng' => float 5.5692100524902
+      'fcode' => string 'PPL' (length=3)
+      'geonameId' => int 3026229
+      'lat' => float 43.489358035839
+
+</code></pre>
 
 <h3>Bgy_Validate_Url</h3>
 <h4>Overview</h4>
@@ -87,8 +340,85 @@ resources.frontController.params.displayExceptions = 1
 
 <h3>Bgy_View_Helper_RelativeDateTime</h3>
 <h4>Overview</h4>
+<p>Bgy_View_Helper provides a efficient and configurable way to generate a relative
+ date/time string from a given Zend_Date object.</p>
+ 
 <h4>Configuration</h4>
+<p>First you need to set up your <span class="class">View</span> object to 
+use your custom View Helper. <br />
+Somewhere in your <span class="filename">Bootstrap.php</span>:
+</p>
+
+<pre><code class="brush: php; code language-php">
+$this->bootstrap('view');
+$view = $this->getResource('view');
+$view->addHelperPath(
+    APPLICATION_PATH . '/../library/Bgy/View/Helper',
+    'Bgy_View_Helper_'
+);
+</code></pre>
+
 <h4>Usage</h4>
+<p>Let's say we have the following dates string, and current date is 2011-02-22T:20:59:15. <br />
+In your view scripts:</p>
+<pre><code class="brush: php; code language-php">
+$relativeDateTime = new Bgy_View_Helper_RelativeDateTime();
+$dates = array(
+    '2010-01-01',
+    '2010-06-01',
+    '2010-12-01',
+    '2011-02-01',
+    '2011-02-20',
+    '2011-02-22T19:50',
+    '2011-02-22T20:58',
+    '2011-02-22T20:59:12',
+);
+$dates = array_map(function($a){return new Zend_Date($a);}, $dates);
+        
+foreach ($dates as $date) {
+    echo $relativeDateTime->relativeDateTime($date) . '<br />';
+}
+</code></pre>
+
+<p>The following code returns:</p>
+<pre><code class="code language-plain">
+1 year
+8 months
+2 months
+3 weeks
+2 days
+1 hour
+19 minutes
+1 minute
+3 seconds
+</code></pre>
+
+<p>Now if we want to change the way the result will be formated, we can use the following method
+<span class="method code boc-nogutter language-php"><code>setUnitTemplate($unitKey, $template)</code></span>  
+ and <span class="method code boc-nogutter language-php"><code>setUnitTemplates(array $templates)</code></span></p>
+<p>Here is an example using the previous code:</p>
+<pre><code class="brush: php; code language-php">
+$relativeDateTime = new Bgy_View_Helper_RelativeDateTime();
+$relativeDateTime->setUnitTemplate(Bgy_View_Helper_RelativeDateTime::DAYS, 'there are %value% days ago');
+</code></pre>
+<p>Alternatively you can do:</p>
+<pre><code class="brush: php; code language-php">
+$relativeDateTime = new Bgy_View_Helper_RelativeDateTime();
+$templates = array(
+    Bgy_View_Helper_RelativeDateTime::DAYS => 'there are %value% days ago',
+);
+$relativeDateTime->setUnitTemplates($templates);
+</code></pre>
+
+<p>returns:</p>
+<pre><code class="code language-plain">
+there are 2 days
+</code></pre>
+
+<p>The helper use <span class="class code boc-nogutter language-php"><code>Zend_View_Helper_Translate</code></span>
+ which means you can translate your template in your prefered translate format (either CSV, gettext, XML, etc.) and they'll
+ be translated automatically.</p>
+
 
 <h2>License</h2>
 <pre>            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
@@ -113,9 +443,9 @@ resources.frontController.params.displayExceptions = 1
 or <a href="http://github.com/borisguery/bgylibrary/tarball/master">tar</a>
 formats.</p>
 <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
-by running:
+by running:</p>
 <pre>$ git clone git://github.com/borisguery/bgylibrary</pre>
-</p>
+
 
 <div class="footer">get the source code on GitHub : <a
   href="http://github.com/borisguery/bgylibrary">borisguery/bgylibrary</a>
@@ -127,14 +457,14 @@ by running:
 <script type="text/javascript" src="scripts/jquery.beautyOfCode-min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-  $.beautyOfCode.init({
-      brushes: ['Plain', 'ini'],
-      ready: function() {
-          $.beautyOfCode.utils.loadScript('http://sandbox.dev/SyntaxHighlighter/shBrushIni.js', function(){});
-          $.beautyOfCode.beautifyAll();
-      }
+      $.beautyOfCode.init({
+          //scripts: 'scripts/syntaxhighlighter/',
+          brushes: ['Plain', 'Php', 'Xml'],
+          ready: function() {
+              $.beautyOfCode.utils.loadScript('http://sandbox.dev/SyntaxHighlighter/shBrushIni.js', function(){$.beautyOfCode.beautifyAll();});
+          }
+      });
   });
-});
 </script>
 </body>
 </html>
