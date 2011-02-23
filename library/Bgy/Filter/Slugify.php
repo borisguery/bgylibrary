@@ -103,7 +103,10 @@ class Bgy_Filter_Slugify implements Zend_Filter_Interface
 
     public function filter($value)
     {
-        $value = preg_replace('/\W+/', $this->getSeparator(), $value);
+        $value = preg_replace('/[^\\pL\d]+/u', $this->getSeparator(), $value);
+        $value = @iconv('UTF-8', 'US-ASCII//TRANSLIT', $value); // transliterate, silently
+        $value = preg_replace('/[^'.$this->getSeparator().'\w]+/', '', $value);
+
         if (null !== $this->getMaxlength()) {
             $value = substr($value, 0, $this->getMaxlength());
         }
@@ -111,6 +114,10 @@ class Bgy_Filter_Slugify implements Zend_Filter_Interface
 
         if ($this->getLowercase()) {
             $value = strtolower($value);
+        }
+
+        if (empty($value)) {
+            $value = null; // should we return null or an empty string?
         }
 
         return $value;
