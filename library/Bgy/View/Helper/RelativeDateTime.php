@@ -79,11 +79,11 @@ class Bgy_View_Helper_RelativeDateTime extends Zend_View_Helper_Abstract
         return $formatedString;
     }
 
-    public function setUnitTemplate($template, $unitKey)
+    public function setUnitTemplate($unitKey, $template)
     {
         if (!isset($this->_unitTemplates[$unitKey])) {
-            require_once 'Bgy/Helper/Exception.php';
-            throw new Zend_Validate_Exception("No unit template exists for key '$unitKey'");
+            require_once 'Bgy/View/Helper/Exception.php';
+            throw new Bgy_View_Helper_Exception("No unit template exists for key '$unitKey'");
         }
 
         $this->_unitTemplates[$unitKey] = $template;
@@ -94,7 +94,7 @@ class Bgy_View_Helper_RelativeDateTime extends Zend_View_Helper_Abstract
     public function setUnitTemplates(array $templates)
     {
         foreach ($templates as $key => $template) {
-            $this->setUnitTemplate($template, $key);
+            $this->setUnitTemplate($key, $template);
         }
         return $this;
     }
@@ -107,8 +107,8 @@ class Bgy_View_Helper_RelativeDateTime extends Zend_View_Helper_Abstract
     public function getUnitTemplate($unitKey)
     {
         if (!isset($this->_unitTemplates[$unitKey])) {
-            require_once 'Bgy/Helper/Exception.php';
-            throw new Bgy_Helper_Exception("No unit template exists for key '$unitKey'");
+            require_once 'Bgy/View/Helper/Exception.php';
+            throw new Bgy_View_Helper_Exception("No unit template exists for key '$unitKey'");
         }
 
         return $this->_unitTemplates[$unitKey];
