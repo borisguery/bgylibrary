@@ -170,7 +170,7 @@ a given string. <br />It replaces the current scheme if it is already present
 <h4 id="bgylib-components-bgy-filter-scheme-http-configuration"><a href="#bgylib-components-bgy-filter-scheme-http-configuration">Configuration</a></h4>
 <p>There is no configuration for this extension</p>
 <h4 id="bgylib-components-bgy-filter-scheme-http-usage"><a href="#bgylib-components-bgy-filter-scheme-http-usage">Usage</a></h4>
-<pre><code class="brush: php; code language-php">
+<pre><code class="brush: php; code language-php boc-no-auto-links">
 $urls = array(
     'borisguery.com',
     'http://borisguery.com',
@@ -260,7 +260,7 @@ $filter = new Bgy_Filter_Slugify('~', false, 35);
 
 <h4 id="bgylib-components-bgy-filter-slugify-usage"><a href="#bgylib-components-bgy-filter-slugify-usage">Usage</a></h4>
 <p>Using the previous configuration, the filtered value returns:</p>
-<pre><code class="brush: php; code language-php">
+<pre><code class="brush: php; code language-php boc-no-auto-links">
 $value = 'http://ßorisGuéry.GithüB.com/BgyLibräry/';
 echo $filter->filter($value);
 
