@@ -213,6 +213,44 @@ matches a shorter and similar keywords. <br />Look at the
 <span class="keyword">rhoncus</span> and <span class="keyword">rhoncus commodo</span> keywords for an example.
 </p>
 
+<h3>Bgy_Filter_Slugify</h3>
+<h4>Overview</h4>
+<p><span class="class code boc-nogutter language-php"><code>Bgy_Filter_Slugify</code></span> 
+ helps you to generate slugs.<br />
+ Slugs are normalized string free of specials charaters, it is commonly used to 
+ generate permalink or product reference.
+<h4>Configuration</h4>
+<p>There are three optional options for this filter:</p>
+<pre><code class="brush: php; code language-php">
+$options = array(
+    'separator' => '~',     // default to '-' (dash)
+    'lowercase' => false,   // default to true
+    'maxlength' => 128,     // default to null (no maxlength)
+);
+</code></pre>
+<p>You can either provide, an array, a Zend_Config object or function arguments 
+in the same given order.
+<br />
+Example:
+</p>
+<pre><code class="brush: php; code language-php">
+$filter = new Bgy_Filter_Slugify('-', false, 20);
+</code></pre>
+
+<h4>Usage</h4>
+<p>Using the previous configuration, the filtered value returns:</p>
+<pre><code class="brush: php; code language-php">
+$value = 'http://BorisGuery.GithuB.com/BgyLibrary/';
+echo $filter->filter($value);
+
+// returns 
+
+'http~BorisGuery~Gith'
+</code></pre>
+
+<p class="note"><em>Note:</em> The length is computed <strong>after</strong> the string 
+being slugified, and if a separator is present at the end of the string, it is trimed.
+Therefore, the resulting length may be different.</p>
 
 <h3>Bgy_Service_Geonames</h3>
 <h4>Overview</h4>
@@ -337,11 +375,6 @@ array
       'lat' => float 43.489358035839
 
 </code></pre>
-
-<h3>Bgy_Validate_Url</h3>
-<h4>Overview</h4>
-<h4>Configuration</h4>
-<h4>Usage</h4>
 
 <h3>Bgy_View_Helper_RelativeDateTime</h3>
 <h4>Overview</h4>
