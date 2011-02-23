@@ -1,6 +1,6 @@
 <?php
 /**
- * @category   Zend
+ * @category   Bgy
  * @package    Bgy_Service
  * @subpackage Geonames
  * @version    $Id: Geonames.php 0 2010-11-18 15:35:11Z borisguery $
@@ -254,7 +254,7 @@ class Bgy_Service_Geonames
      * Set username
      *
      * @param  string $username
-     * @return Zend_Service_Geonames Provides a fluent interface
+     * @return Bgy_Service_Geonames Provides a fluent interface
      */
     public function setUsername($username)
     {
@@ -278,7 +278,7 @@ class Bgy_Service_Geonames
      * Set token
      *
      * @param  string $token
-     * @return Zend_Service_Geonames Provides a fluent interface
+     * @return Bgy_Service_Geonames Provides a fluent interface
      */
     public function setToken($token)
     {
@@ -300,11 +300,22 @@ class Bgy_Service_Geonames
     /**
      * Retrieve all the supported methods
      *
-     * @return array Available methods
+     * @deprecated Proxy to getSupportedMethods
+     * @return array Supported methods
      */
     public static function getAvailableMethods()
     {
-        return array_keys(self::$_availableMethods);
+        return self::getSupportedMethods();
+    }
+
+    /**
+     * Retrieve all the supported methods
+     *
+     * @return array Supported methods
+     */
+    public static function getSupportedMethods()
+    {
+        return array_keys(self::$_supportedMethods);
     }
 
     /**
@@ -312,7 +323,7 @@ class Bgy_Service_Geonames
      *
      * @param string $method The webservice method
      * @param array $params The parameters
-     * @throws Zend_Service_Geonames_Exception
+     * @throws Bgy_Service_Geonames_Exception
      * @return array
      */
     public function __call($method, $params = array())
