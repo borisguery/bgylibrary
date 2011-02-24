@@ -1,4 +1,7 @@
 <?php
+
+require_once 'Zend/Filter/Interface.php';
+
 class Bgy_Filter_Slugify implements Zend_Filter_Interface
 {
 

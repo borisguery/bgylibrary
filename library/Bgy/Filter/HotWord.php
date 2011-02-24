@@ -1,4 +1,6 @@
 <?php
+require_once 'Zend/Filter/Interface.php';
+
 class Bgy_Filter_HotWord implements Zend_Filter_Interface
 {
     protected $_wrapper = '<strong>%string%</strong>';
@@ -35,5 +37,14 @@ class Bgy_Filter_HotWord implements Zend_Filter_Interface
 
         return $this;
     }
-}
 
+    public function getKeywords()
+    {
+        return $this->_keywords;
+    }
+
+    public function getWrapper()
+    {
+        return $this->_wrapper;
+    }
+}

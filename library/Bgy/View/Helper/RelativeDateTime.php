@@ -1,4 +1,6 @@
 <?php
+require_once 'Zend/View/Helper/Abstract.php';
+
 class Bgy_View_Helper_RelativeDateTime extends Zend_View_Helper_Abstract
 {
     const YEAR = 'YEAR';

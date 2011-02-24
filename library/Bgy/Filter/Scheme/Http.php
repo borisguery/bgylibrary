@@ -1,4 +1,6 @@
 <?php
+require_once 'Zend/Filter/Interface.php';
+
 class Bgy_Filter_Scheme_Http implements Zend_Filter_Interface
 {
     public function filter($value)
