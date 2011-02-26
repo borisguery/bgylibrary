@@ -2,9 +2,14 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Bgy Library, an Extension Zend Framework</title>
+<title>Bgy Library, a Zend Framework Extension</title>
 <link rel="stylesheet" href="http://borisguery.com/lib/minify/g=bgy-css-min" type="text/css" />
-<style type="text/css">body{text-align:left}</style>
+<style type="text/css">
+body{text-align:left}
+p.post-a-comment {
+  text-align: right;
+}
+</style>
 </head>
 
 <body>
@@ -40,6 +45,7 @@ a Zend Framework 1.1x project.</p>
  object and/or an instance of 
  <span class="class code boc-nogutter language-php"><code>\Doctrine\ORM\EntityManager</code></span>.</p>
 <p>You can use it to configure your application or the command line tools provided by Doctrine.</p>
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
 <h4 id="bgylib-components-bgy-application-resource-doctrine2-configuration"><a href="#bgylib-components-bgy-application-resource-doctrine2-configuration">Configuration</a></h4>
 <p>Here is a sample <span class="filename code boc-nogutter language-plain"><code>application.ini</code></span> 
  with available options</p>
@@ -89,6 +95,7 @@ autoloaderNamespaces[] = "Doctrine"
  <span class="filename code boc-nogutter language-plain"><code>Doctrine/DBAL</code></span> and
  <span class="filename code boc-nogutter language-plain"><code>Symfony/*</code></span> 
  under <span class="filename code boc-nogutter language-plain"><code>library/</code></span>.
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
 
 <h4 id="bgylib-components-bgy-application-resource-doctrine2-usage"><a href="#bgylib-components-bgy-application-resource-doctrine2-usage">Usage</a></h4>
 <h5 id="bgylib-components-bgy-application-resource-doctrine2-usage-web"><a href="#bgylib-components-bgy-application-resource-doctrine2-usage-web">In your web application</a></h5>
@@ -102,6 +109,7 @@ if ($bootstrap->hasResource('doctrine2')) {
 <p>You can now store the <span class="class code boc-nogutter language-php"><code>EntityManager</code></span> in the 
  <span class="class code boc-nogutter language-php"><code>Registry</code></span>, 
  or use it through a <span class="class code boc-nogutter language-php"><code>Service</code></span>.
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
 
 <h5 id="bgylib-components-bgy-application-resource-doctrine2-usage-cli"><a href="#bgylib-components-bgy-application-resource-doctrine2-usage-cli">In doctrine-cli-config.php</a></h5>
 <pre><code class="brush: php; code language-php">
@@ -129,6 +137,7 @@ $GLOBALS['helperSet'] = new \Symfony\Component\Console\Helper\HelperSet(
 <pre><code class="brush: php; code language-php">
 $configFile = getcwd() . DIRECTORY_SEPARATOR . 'configs/doctrine-cli-config.php';
 </code></pre>
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
 
 <h3 id="bgylib-components-bgy-controller-plugin-ajaxcontextdefaultformat"><a href="#bgylib-components-bgy-controller-plugin-ajaxcontextdefaultformat">Bgy_Controller_Plugin_AjaxContextDefaultFormat</a></h3>
 <h4 id="bgylib-components-bgy-controller-plugin-ajaxcontextdefaultformat-overview"><a href="#bgylib-components-bgy-controller-plugin-ajaxcontextdefaultformat-overview">Overview</a></h4>
@@ -147,6 +156,9 @@ $this->url(array(
 Basicly, this plugin check for an XHR request, and set a defaut format (default to 'JSON').<br />
 However, you can still override the format parameter when necessary.</p>
 
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
+
+
 <h4 id="bgylib-components-bgy-controller-plugin-ajaxcontextdefaultformat-configuration"><a href="#bgylib-components-bgy-controller-plugin-ajaxcontextdefaultformat-configuration">Configuration</a></h4>
 <p>In your <span class="filename code boc-nogutter language-plain"><code>Bootstrap.php</code></span>, place the following code:</p>
 <pre><code class="brush: php; code language-php">
@@ -158,6 +170,8 @@ protected function _initPlugins()
 }
 </code></pre>
 <p>If you don't provide a default format, JSON is used.</p>
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
+
 
 <h4 id="bgylib-components-bgy-controller-plugin-ajaxcontextdefaultformat-usage"><a href="#bgylib-components-bgy-controller-plugin-ajaxcontextdefaultformat-usage">Usage</a></h4>
 <p>None</p>
@@ -167,6 +181,8 @@ protected function _initPlugins()
 <p>Bgy_Filter_Scheme_Http prepends the <span class="code">http://</span> scheme to 
 a given string. <br />It replaces the current scheme if it is already present 
  and/or malformed before to prepend</p>
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
+
 <h4 id="bgylib-components-bgy-filter-scheme-http-configuration"><a href="#bgylib-components-bgy-filter-scheme-http-configuration">Configuration</a></h4>
 <p>There is no configuration for this extension</p>
 <h4 id="bgylib-components-bgy-filter-scheme-http-usage"><a href="#bgylib-components-bgy-filter-scheme-http-usage">Usage</a></h4>
@@ -191,10 +207,14 @@ foreach ($urls as $url) {
 <pre><code class="brush: php; code language-php">
 $filter->filter('httpborisguery.com');
 </code></pre>
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
+
 
 <h3 id="bgylib-components-bgy-filter-hotword"><a href="#bgylib-components-bgy-filter-hotword">Bgy_Filter_HotWord</a></h3>
 <h4 id="bgylib-components-bgy-filter-hotword-overview"><a href="#bgylib-components-bgy-filter-hotword-overview">Overview</a></h4>
 <p>The main goal of this filter is to wrap a keyword into an html element.</p> 
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
+
 <h4 id="bgylib-components-bgy-filter-hotword-configuration"><a href="#bgylib-components-bgy-filter-hotword-configuration">Configuration</a></h4>
 <pre><code class="brush: php; code language-php">
 $filter = new Bgy_Filter_HotWord();
@@ -207,6 +227,7 @@ $filter->setKeywords(array(
 ));
 $filter->setWrapper('<strong>%string%</strong>');
 </code></pre>
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
 
 <h4 id="bgylib-components-bgy-filter-hotword-usage"><a href="#bgylib-components-bgy-filter-hotword-usage">Usage</a></h4>
 <p>Using the previous configuration, let's say we have the following text:</p>
@@ -233,6 +254,7 @@ The longest word sequence found will be used first, and won't be wrapped twice i
 matches a shorter and similar keywords. <br />Look at the 
 <span class="keyword">rhoncus</span> and <span class="keyword">rhoncus commodo</span> keywords for an example.
 </p>
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
 
 <h3 id="bgylib-components-bgy-filter-slugify"><a href="#bgylib-components-bgy-filter-slugify">Bgy_Filter_Slugify</a></h3>
 <h4 id="bgylib-components-bgy-filter-slugify-overview"><a href="#bgylib-components-bgy-filter-slugify-overview">Overview</a></h4>
@@ -240,6 +262,9 @@ matches a shorter and similar keywords. <br />Look at the
  helps you to generate slugs.<br />
  Slugs are normalized string free of specials charaters, it is commonly used to 
  generate permalink or product reference.
+</p>
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
+
 <h4 id="bgylib-components-bgy-filter-slugify-configuration"><a href="#bgylib-components-bgy-filter-slugify-configuration">Configuration</a></h4>
 <p>There are three optional options for this filter:</p>
 <pre><code class="brush: php; code language-php">
@@ -257,6 +282,7 @@ Example:
 <pre><code class="brush: php; code language-php">
 $filter = new Bgy_Filter_Slugify('~', false, 35);
 </code></pre>
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
 
 <h4 id="bgylib-components-bgy-filter-slugify-usage"><a href="#bgylib-components-bgy-filter-slugify-usage">Usage</a></h4>
 <p>Using the previous configuration, the filtered value returns:</p>
@@ -272,6 +298,8 @@ echo $filter->filter($value);
 <p class="note"><em>Note:</em> The length is computed <strong>after</strong> the string 
 being slugified, and if a separator is present at the end of the string, it is trimed.
 Therefore, the resulting length may be different.</p>
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
+
 
 <h3 id="bgylib-components-bgy-service-geonames"><a href="#bgylib-components-bgy-service-geonames">Bgy_Service_Geonames</a></h3>
 <h4 id="bgylib-components-bgy-service-geonames-overview"><a href="#bgylib-components-bgy-service-geonames-overview">Overview</a></h4>
@@ -279,6 +307,8 @@ Therefore, the resulting length may be different.</p>
  creative commons attribution license. To know more about Geonames, visit their 
  <a href="http://www.geonames.org/about.html">website</a>.<p>
 <p>Bgy_Service_Geonames is a webservice wrapper which respects the Zend Framework</p>
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
+
 <h4 id="bgylib-components-bgy-service-geonames-configuration"><a href="#bgylib-components-bgy-service-geonames-configuration">Configuration</a></h4>
 <p class="note"><em>Note:</em> According to this 
 <a href="http://geonames.wordpress.com/2011/01/28/application-identification-for-free-geonames-web-services/">announcement</a>
@@ -299,6 +329,8 @@ $g = new Bgy_Service_Geonames();
 $g->setUsername('borisguery')
     ->setToken('abcdef0123456789');
 </code></pre>
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
+
 <h4 id="bgylib-components-bgy-service-usage"><a href="#bgylib-components-bgy-service-usage">Usage</a></h4>
 <p>Most of <a href="http://www.geonames.org/export/ws-overview.html">the methods</a>
  provided by the Geonames webservices are available.<br /><br />
@@ -326,6 +358,7 @@ uses the magic method <span class="class code boc-nogutter language-php"><code>_
 <span class="class code boc-nogutter language-php"><code>Bgy_Service_Geonames_Exception</code></span>
 with the message returned by the webservice.<br />
 See the <a href="http://www.geonames.org/export/webservice-exception.html">manual</a> for a description of the errors.</p>
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
 
 <h5 id="bgylib-components-bgy-service-geonames-usage-example"><a href="#bgylib-components-bgy-service-geonames-usage-example">Examples</a></h5>
 <p>Retrieve informations for a given postal code</p>
@@ -396,11 +429,14 @@ array
       'lat' => float 43.489358035839
 
 </code></pre>
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
 
 <h3 id="bgylib-components-bgy-view-helper-relativedatetime"><a href="#bgylib-components-bgy-view-helper-relativedatetime">Bgy_View_Helper_RelativeDateTime</a></h3>
 <h4 id="bgylib-components-bgy-view-helper-relativedatetime-overview"><a href="#bgylib-components-bgy-view-helper-relativedatetime-overview">Overview</a></h4>
 <p>Bgy_View_Helper provides a efficient and configurable way to generate a relative
  date/time string from a given Zend_Date object.</p>
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
+
  
 <h4 id="bgylib-components-bgy-view-helper-relativedatetime-configuration"><a href="#bgylib-components-bgy-view-helper-relativedatetime-configuration">Configuration</a></h4>
 <p>First you need to set up your <span class="class code boc-nogutter language-php"><code>View</code></span> object to 
@@ -416,6 +452,8 @@ $view->addHelperPath(
     'Bgy_View_Helper_'
 );
 </code></pre>
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
+
 
 <h4 id="bgylib-components-bgy-view-helper-relativedatetime-usage"><a href="#bgylib-components-bgy-view-helper-relativedatetime-usage">Usage</a></h4>
 <p>Let's say we have the following dates string, and current date is 2011-02-22T:20:59:15. <br />
@@ -477,7 +515,7 @@ there are 2 days
 <p>The helper use <span class="class code boc-nogutter language-php"><code>Zend_View_Helper_Translate</code></span>
  which means you can translate your template in your prefered translate format (either CSV, gettext, XML, etc.) and they'll
  be translated automatically.</p>
-
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
 
 <h2 id="bgylib-license"><a href="#bgylib-license">License</a></h2>
 <pre>            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
