@@ -65,7 +65,7 @@ class Bgy_Service_Geonames
      *
      * @var array
      */
-    protected static $_availableMethods = array(
+    protected static $_supportedMethods = array(
         'astergdem' => array(
             'output' => 'json',
         ),
