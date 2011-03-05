@@ -27,6 +27,11 @@ class Bgy_Application_Resource_Doctrine2
      */
     protected $_entityManager;
 
+    /**
+     * @var \Doctrine\Common\EventManager
+     */
+    protected $_eventManager;
+
 
     /**
      *
@@ -41,6 +46,7 @@ class Bgy_Application_Resource_Doctrine2
         $this->_setupCache();
         $this->_setupCustomTypes();
         $this->_setupCustomHydrators();
+        $this->_setupEventManager();
         $this->_setupOptions();
 
         return $this;
@@ -62,11 +68,24 @@ class Bgy_Application_Resource_Doctrine2
             $options = $this->getOptions();
             $this->_entityManager = EntityManager::create(
                 $options['params'],
-                $this->getConfiguration()
+                $this->getConfiguration(),
+                $this->getEventManager()
             );
         }
 
         return $this->_entityManager;
+    }
+
+    public function getEventManager()
+    {
+        return $this->_eventManager;
+    }
+
+    public function setEventManager(\Doctrine\Common\EventManager $eventManager)
+    {
+        $this->_eventManager = $eventManager;
+
+        return $this;
     }
 
     public function getConnectionInformations()
@@ -74,6 +93,41 @@ class Bgy_Application_Resource_Doctrine2
         $options = $this->getOptions();
 
         return $options['params'];
+    }
+
+    protected function _setupEventManager()
+    {
+        $options = $this->getOptions();
+
+        if (!empty($options['events'])) {
+            if (isset($options['events']['eventManager'])) {
+                $eventManager = new $options['events']['eventManager'];
+            } else {
+                $eventManager = new \Doctrine\Common\EventManager();
+            }
+
+            if (!empty($options['events']['subscribers'])) {
+                $subscribers = $options['events']['subscribers'];
+
+                foreach ($subscribers as $subscriberOptions) {
+                    if (is_array($subscriberOptions)) {
+                        $subscriberClass = $subscriberOptions['className'];
+                        unset($subscriberOptions['className']);
+                        // We use Reflection to create a new instance of the Subscriber
+                        // and provides according arguments
+                        $subscriberReflection = new ReflectionClass($subscriberClass);
+                        $subscriber = $subscriberReflection
+                            ->newInstanceArgs($subscriberOptions);
+                    } else {
+                        $subscriber = new $subscriberOptions;
+                    }
+
+                    $eventManager->addEventSubscriber($subscriber);
+                }
+            }
+
+            $this->setEventManager($eventManager);
+        }
     }
 
     protected function _setupMetadata()
