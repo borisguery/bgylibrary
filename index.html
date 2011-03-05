@@ -225,7 +225,7 @@ $configFile = getcwd() . DIRECTORY_SEPARATOR . 'configs/doctrine-cli-config.php'
 It is now really an extension to Zend Framework, as it implements <span class="classname code boc-noguttr language-php"><code>\Doctrine\DBAL\Logging\SQLLogger</code></span> but makes
 use of <span class="classname code boc-noguttr language-php">Zend_Wildfire</span> component, and is part of the <strong>Zend Framework Doctrine 2 Integration</strong>.</p>
 <h4 id="bgylib-components-bgy-dbal-logging-firebug-configuration"><a href="#bgylib-components-bgy-dbal-logging-firebug-configuration">Configuration</a></h4>
-<h5 id="bgylib-components-bgy-dbal-logging-firebug-resource"><a href="#bgylib-components-bgy-dbal-logging-firebug-configuration-resource">Using Bgy_Application_Resource_Doctrine2</a></h5>
+<h5 id="bgylib-components-bgy-dbal-logging-firebug-configuration-resource"><a href="#bgylib-components-bgy-dbal-logging-firebug-configuration-resource">Using Bgy_Application_Resource_Doctrine2</a></h5>
 <p>By default, now logger are used by Doctrine 2, to use this custom logger, 
 specify its classname in your 
 <span class="filename code boc-nogutter language-plain"><code>config.ini</code></span>.
@@ -250,7 +250,7 @@ resources.doctrine2.params.port = 3306
 resources.doctrine2.params.user = "root"
 resources.doctrine2.params.password = ""
 </code></pre>
-<h5 id="bgylib-components-bgy-dbal-logging-firebug-native"><a href="#bgylib-components-bgy-dbal-logging-firebug-configuration-native">Using \Doctrine\DBAL\Configuration</a></h5>
+<h5 id="bgylib-components-bgy-dbal-logging-firebug-configuration-native"><a href="#bgylib-components-bgy-dbal-logging-firebug-configuration-native">Using \Doctrine\DBAL\Configuration</a></h5>
 <p>If you don't want to use the custom resource, you can still use this logger by using 
 the <span class="classname code boc-nogutter language-plain"><code>Doctrine\Configuration</code></span>
 <span class="method code boc-nogutter language-plain"><code>setSQLLogger()</code></span> setter method.</p>
