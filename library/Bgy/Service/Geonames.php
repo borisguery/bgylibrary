@@ -217,7 +217,7 @@ class Bgy_Service_Geonames
      */
     protected $_rest = null;
 
-     /**
+    /**
      * Options passed to constructor
      *
      * @var array
@@ -328,7 +328,7 @@ class Bgy_Service_Geonames
      */
     public function __call($method, $params = array())
     {
-        if (!in_array($method, $this->getAvailableMethods())) {
+        if (!in_array($method, $this->getSupportedMethods())) {
             include_once 'Bgy/Service/Geonames/Exception.php';
             throw new Bgy_Service_Geonames_Exception(
                 'Invalid method "' . $method . '"'
@@ -365,7 +365,7 @@ class Bgy_Service_Geonames
     {
         $this->_rest->setUri(self::API_URI);
         $path = $method;
-        $type = self::$_availableMethods[$path]['output'];
+        $type = self::$_supportedMethods[$path]['output'];
 
         // Construct the path accordingly to the output type
         switch ($type) {
@@ -425,16 +425,16 @@ class Bgy_Service_Geonames
         }
         $arrayFromJson = Zend_Json::decode($jsonResult);
 
-        if (isset(self::$_availableMethods[$method]['root'])
-            && (null !== ($root = self::$_availableMethods[$method]['root']))
-            && isset($arrayFromJson[$root])) {
+        if (isset(self::$_supportedMethods[$method]['root'])
+        && (null !== ($root = self::$_supportedMethods[$method]['root']))
+        && isset($arrayFromJson[$root])) {
             $arrayFromJson = $arrayFromJson[$root];
         }
 
         return $arrayFromJson;
     }
 
-     /**
+    /**
      * Evaluates result
      *
      * @param   Array $result
