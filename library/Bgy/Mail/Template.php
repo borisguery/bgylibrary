@@ -16,11 +16,6 @@
  * @author      Boris Guéry <guery.b@gmail.com>
  * @license     http://sam.zoy.org/wtfpl/COPYING
  * @link        http://borisguery.github.com/bgylibrary
- * @category   Bgy
- * @package    Mail
- * @subpackage Template
- * @author Boris Guéry <guery.b@gmail.com>
- *
  */
 namespace Bgy\Mail;
 use Bgy\Mail\Template;
