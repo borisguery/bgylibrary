@@ -1,5 +1,4 @@
 <?php
-<<<<<<< HEAD
 /**
  * Bgy Library
  *
@@ -17,8 +16,6 @@
  * @license     http://sam.zoy.org/wtfpl/COPYING
  * @link        http://borisguery.github.com/bgylibrary
  */
-=======
->>>>>>> 7eb1ef5... * Added \Bgy\Mail\Template
 namespace Bgy\Mail;
 
 class Exception extends \Bgy_Exception {}

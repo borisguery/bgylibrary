@@ -2,7 +2,6 @@
 /**
  * Bgy Library
  *
-<<<<<<< HEAD
  * LICENSE
  *
  * This program is free software. It comes without any warranty, to
@@ -17,13 +16,11 @@
  * @author      Boris Guéry <guery.b@gmail.com>
  * @license     http://sam.zoy.org/wtfpl/COPYING
  * @link        http://borisguery.github.com/bgylibrary
-=======
  * @category   Bgy
  * @package    Mail
  * @subpackage Template
  * @author Boris Guéry <guery.b@gmail.com>
  *
->>>>>>> 7eb1ef5... * Added \Bgy\Mail\Template
  */
 namespace Bgy\Mail;
 use Bgy\Mail\Template;
@@ -153,13 +150,8 @@ class Template extends \Zend_Mail
      *
      * Available options
      * 'layout'       => Zend_Layout
-<<<<<<< HEAD
-     * 'view'          => Zend_View
-     * 'charset'       => 'utf-8'
-=======
-     * 'view'	      => Zend_View
+     * 'view'         => Zend_View
      * 'charset' 	  => 'utf-8'
->>>>>>> 7eb1ef5... * Added \Bgy\Mail\Template
      * 'htmlSuffix'   => 'phtml'
      * 'textSuffix'   => 'ptxt'
      * 'layoutPath'   => 'layout/scripts'
@@ -398,13 +390,8 @@ class Template extends \Zend_Mail
     /**
      * Add a variable to assign to the view object
      *
-<<<<<<< HEAD
-     * @param string              $name
-     * @param any      Optional $value
-=======
      * @param string 	   	  $name
      * @param any 	 Optional $value
->>>>>>> 7eb1ef5... * Added \Bgy\Mail\Template
      * @return Bgy\Mail\Template Provides fluent interface
      */
     public function addViewVariable($name, $value = null)
@@ -924,11 +911,7 @@ class Template extends \Zend_Mail
     /**
      * Sets the format to use when sending emails
      * Allowed formats are either:
-<<<<<<< HEAD
-     *     - 'html' Html version only
-=======
      * 	- 'html' Html version only
->>>>>>> 7eb1ef5... * Added \Bgy\Mail\Template
      *  - 'text' Text version only
      *  - 'both' Both text and html version
      *
@@ -955,11 +938,7 @@ class Template extends \Zend_Mail
     /**
      * Sets the default format to use when sending emails
      * Allowed formats are either:
-<<<<<<< HEAD
      *  - 'html' Html version only
-=======
-     * 	- 'html' Html version only
->>>>>>> 7eb1ef5... * Added \Bgy\Mail\Template
      *  - 'text' Text version only
      *  - 'both' Both text and html version
      *
