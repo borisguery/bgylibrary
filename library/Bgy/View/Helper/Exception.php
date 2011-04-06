@@ -11,9 +11,10 @@
  * http://sam.zoy.org/wtfpl/COPYING for more details.
  *
  * @category    Bgy
- * @package     Bgy
+ * @package     Bgy\View
+ * @subpackage  Helper
  * @author      Boris Guéry <guery.b@gmail.com>
  * @license     http://sam.zoy.org/wtfpl/COPYING
  * @link        http://borisguery.github.com/bgylibrary
  */
-class Bgy_Exception extends Zend_Exception {}
+class Bgy_View_Helper_Exception extends Bgy_Exception {}
