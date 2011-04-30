@@ -11,9 +11,12 @@
  * http://sam.zoy.org/wtfpl/COPYING for more details.
  *
  * @category    Bgy
- * @package     Bgy
+ * @package     Bgy\Mail
+ * @subpackage  Template
  * @author      Boris Guéry <guery.b@gmail.com>
  * @license     http://sam.zoy.org/wtfpl/COPYING
  * @link        http://borisguery.github.com/bgylibrary
  */
-class Bgy_Exception extends Zend_Exception {}
+namespace Bgy\Mail\Template;
+
+class Exception extends \Bgy\Mail\Exception {}

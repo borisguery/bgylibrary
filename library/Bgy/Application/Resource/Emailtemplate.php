@@ -11,29 +11,28 @@
  * http://sam.zoy.org/wtfpl/COPYING for more details.
  *
  * @category    Bgy
- * @package     Bgy\Filter
+ * @package     Bgy\Application
+ * @subpackage  Resource
  * @author      Boris Guéry <guery.b@gmail.com>
  * @license     http://sam.zoy.org/wtfpl/COPYING
  * @link        http://borisguery.github.com/bgylibrary
+ *
  */
-require_once 'Zend/Filter/Interface.php';
+use Bgy\Mail\Template;
 
-class Bgy_Filter_Scheme_Http implements Zend_Filter_Interface
+class Bgy_Application_Resource_Emailtemplate
+    extends \Zend_Application_Resource_ResourceAbstract
 {
-    public function filter($value)
+    public function init()
     {
-        $uri = explode(':', $value, 2);
-        $valueFiltered = 'http://';
-
-        if (!isset($uri[1])) {
-            $valueFiltered .= $uri[0];
-        } else {
-            while (0 === ($pos = strpos($uri[1], '/'))) {
-                $uri[1] = substr($uri[1], 1);
+        $options = $this->getOptions();
+        if (isset($options)) {
+            foreach ($options as $option => $value) {
+                if ('default' === substr($option, 0, 7)) {
+                    $method = 'set' . ucfirst($option);
+                    Template::$method($value);
+                }
             }
-            $valueFiltered .= $uri[1];
         }
-
-        return $valueFiltered;
     }
 }
