@@ -18,8 +18,8 @@
  * @link        http://borisguery.github.com/bgylibrary
  * @link        http://www.doctrine-project.org/docs/orm/2.0/en/reference/configuration.html
  */
-use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-use Doctrine\ORM\Configuration,
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver,
+    Doctrine\ORM\Configuration,
     Doctrine\ORM\Mapping\Driver\YamlDriver,
     Doctrine\ORM\Mapping\Driver\XmlDriver,
     Doctrine\ORM\Mapping\Driver\PHPDriver,
@@ -190,6 +190,39 @@ class Bgy_Application_Resource_Doctrine2
 
             $this->getConfiguration()->setMetadataDriverImpl($driver);
         }
+    }
+
+    protected function _setupEntities()
+    {
+        $options = $this->getOptions();
+
+        foreach ($options['entities']['namespaces'] as $alias => $namespace) {
+            $this->getConfiguration()->addEntityNamespace($alias, $namespace);
+        }
+    }
+
+    protected function _setupCustomFunctions()
+    {
+        $options = $this->getOptions();
+
+        if (!empty($options['functions'])) {
+            if (!empty($options['functions']['string'])) {
+                foreach ($options['functions']['string'] as $name => $className) {
+                    $this->getConfiguration()->addCustomStringFunction($name, $className);
+                }
+            }
+            if (!empty($options['functions']['numeric'])) {
+                foreach ($options['functions']['numeric'] as $name => $className) {
+                    $this->getConfiguration()->addCustomStringFunction($name, $className);
+                }
+            }
+            if (!empty($options['functions']['datetime'])) {
+                foreach ($options['functions']['datetime'] as $name => $className) {
+                    $this->getConfiguration()->addCustomStringFunction($name, $className);
+                }
+            }
+        }
+
     }
 
     protected function _setupCache()
