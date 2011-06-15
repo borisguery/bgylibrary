@@ -2,20 +2,11 @@
 /**
  * Bgy Library
  *
- * LICENSE
+ * @category   Bgy
+ * @package    Mail
+ * @subpackage Template
+ * @author Boris Guéry <guery.b@gmail.com>
  *
- * This program is free software. It comes without any warranty, to
- * the extent permitted by applicable law. You can redistribute it
- * and/or modify it under the terms of the Do What The Fuck You Want
- * To Public License, Version 2, as published by Sam Hocevar. See
- * http://sam.zoy.org/wtfpl/COPYING for more details.
- *
- * @category    Bgy
- * @package     Bgy\Mail
- * @subpackage  Template
- * @author      Boris Guéry <guery.b@gmail.com>
- * @license     http://sam.zoy.org/wtfpl/COPYING
- * @link        http://borisguery.github.com/bgylibrary
  */
 namespace Bgy\Mail;
 use Bgy\Mail\Template;
@@ -45,7 +36,7 @@ class Template extends \Zend_Mail
      * The html prefix (ie: phtml) without the leading '.' (dot)
      * @var string
      */
-    protected $_htmlSuffix;
+    protected $_htmlSuffix = 'phtml';
     protected static $_defaultHtmlSuffix;
 
     /**
@@ -60,6 +51,13 @@ class Template extends \Zend_Mail
      */
     protected $_layout;
     protected static $_defaultLayout;
+
+    /**
+     * The path to find the layouts
+     *
+     * @var string
+     */
+    protected static $_defaultLayoutPath;
 
     /**
      *
@@ -97,6 +95,12 @@ class Template extends \Zend_Mail
      * @var string
      */
     protected static $_defaultFormat = self::FORMAT_BOTH;
+
+    /**
+     * Mail character set
+     * @var string
+     */
+    protected static $_defaultCharset = 'iso-8859-1';
 
     /**
      *
@@ -140,12 +144,13 @@ class Template extends \Zend_Mail
      * @var bool
      */
     protected $_convertHtmlToText;
+    protected static $_defaultConvertHtmlToText;
 
     /**
      *
      * Available options
      * 'layout'       => Zend_Layout
-     * 'view'         => Zend_View
+     * 'view'	      => Zend_View
      * 'charset' 	  => 'utf-8'
      * 'htmlSuffix'   => 'phtml'
      * 'textSuffix'   => 'ptxt'
@@ -156,14 +161,16 @@ class Template extends \Zend_Mail
      * @param Zend_Config|Array $options
      * @return void
      */
-    public function __construct($options = null)
+    public function __construct($options = array())
     {
-        if (null !== $options) {
-            if (is_array($options)) {
-                $this->setOptions($options);
-            } elseif ($options instanceof \Zend_Config) {
-                $this->setOptions($options->toArray());
-            }
+        // We reset the actual charset which defaults to 'iso-8859-1'
+        // to allow a custom default charset
+        $this->setCharset(null);
+
+        if (is_array($options)) {
+            $this->setOptions($options);
+        } elseif ($options instanceof \Zend_Config) {
+            $this->setOptions($options->toArray());
         }
 
         $this->init();
@@ -190,6 +197,10 @@ class Template extends \Zend_Mail
             $this->setTemplatePathToDefault();
         }
 
+        if (null === $this->getLayout()->getLayoutPath()) {
+            $this->setLayoutPathToDefault();
+        }
+
         if (method_exists($this->getView(), 'addScriptPath')) {
             $this->getView()->addScriptPath($this->getTemplatePath());
         } else {
@@ -207,6 +218,10 @@ class Template extends \Zend_Mail
         if (null === $this->isConvertHtmlToText()) {
             $this->setConvertHtmlToTextToDefault();
         }
+
+        if (null === $this->getCharset()) {
+            $this->setCharsetToDefault();
+        }
     }
 
     /**
@@ -223,9 +238,9 @@ class Template extends \Zend_Mail
                 $view = new $view;
             }
         } else {
+            // Set default view to Zend_View
             $view = new \Zend_View();
         }
-        $this->setView($view);
         unset($options['view']);
 
         if (isset($options['layout'])) {
@@ -234,6 +249,7 @@ class Template extends \Zend_Mail
                 $layout = new $layout;
             }
         } else {
+            // Default layout to Zend_Layout
             $layout = new \Zend_Layout();
         }
 
@@ -243,6 +259,7 @@ class Template extends \Zend_Mail
                 $htmlRenderer = new $htmlRenderer;
             }
         } else {
+            // Default provided Html Renderer to convert Html to Text
             $htmlRenderer = new Template\Html\Renderer\SimpleText();
         }
 
@@ -251,13 +268,20 @@ class Template extends \Zend_Mail
 
         $layout->setView($view);
         $this->setLayout($layout);
+        $this->setView($view);
         unset($options['layout']);
+
+        if (!isset($options['layoutScript'])) {
+            // Default layout script name 'layout'
+            $options['layoutScript'] = 'layout';
+        }
 
         foreach ($options as $key => $value) {
             $method = 'set' . ucfirst($key);
             if (method_exists($this, $method)) {
                 $this->$method($value);
             }
+            unset($options[$key]);
         }
 
         return $this;
@@ -272,6 +296,47 @@ class Template extends \Zend_Mail
     public function setCharset($charset)
     {
         $this->_charset = $charset;
+
+        return $this;
+    }
+
+    /**
+     * Sets the default charset used by Zend_Mail
+     *
+     * @param string $charset
+     */
+    public static function setDefaultCharset($charset)
+    {
+        self::$_defaultCharset = $charset;
+    }
+
+    /**
+     * Gets the default charset used by Zend_Mail
+     *
+     * @return string The default charset
+     */
+    public static function getDefaultCharset()
+    {
+        return self::$_defaultCharset;
+    }
+
+	/**
+	 * Clears the default charset
+	 */
+    public static function clearDefaultCharset()
+    {
+        self::$_defaultCharset = null;
+    }
+
+    /**
+     * Sets the charsets based on the defaults
+     *
+     * @return Bgy\Mail\Template Provides fluent interface
+     */
+    public function setCharsetToDefault()
+    {
+        $charset = self::getDefaultCharset();
+        $this->setCharset($charset);
 
         return $this;
     }
@@ -333,6 +398,7 @@ class Template extends \Zend_Mail
     {
         if (\Zend_Layout::getMvcInstance() && ($layoutView = \Zend_Layout::getMvcInstance()->getView())
             && method_exists($layoutView, 'getHelperPaths') && method_exists($view, 'addHelperPath')) {
+            // Use of \\ to fix problem when add a Prefix with namespaces (else _ is appended)
             $view->addHelperPath(dirname(__FILE__) . '/Template/View/Helper', 'Bgy\Mail\Template\View\Helper\\');
             $helperPaths = $layoutView->getHelperPaths();
             foreach ($helperPaths as $prefix => $paths) {
@@ -340,6 +406,8 @@ class Template extends \Zend_Mail
                     $view->addHelperPath($path, $prefix);
                 }
             }
+        } elseif (($layoutView = $this->getLayout()->getView()) && method_exists($view, 'addHelperPath')) {
+            $view->addHelperPath(dirname(__FILE__) . '/Template/View/Helper', 'Bgy\Mail\Template\View\Helper\\');
         }
 
         $this->_view = $view;
@@ -933,7 +1001,7 @@ class Template extends \Zend_Mail
     /**
      * Sets the default format to use when sending emails
      * Allowed formats are either:
-     *  - 'html' Html version only
+     * 	- 'html' Html version only
      *  - 'text' Text version only
      *  - 'both' Both text and html version
      *
@@ -1059,6 +1127,53 @@ class Template extends \Zend_Mail
     public function getLayoutPath()
     {
         return $this->getLayout()->getLayoutPath();
+    }
+
+    /**
+     * Sets the default layout path
+     *
+     * @param string $path
+     */
+    public static function setDefaultLayoutPath($path)
+    {
+        self::$_defaultLayoutPath = $path;
+    }
+
+    /**
+     * Gets the default layout path
+     *
+     * @return string The layout path
+     */
+    public static function getDefaultLayoutPath()
+    {
+        return self::$_defaultLayoutPath;
+    }
+
+    /**
+     * Clears the default layout path
+     */
+    public static function clearDefaultLayoutPath()
+    {
+        self::$_defaultLayoutPath = null;
+    }
+
+    /**
+     * Sets the layout path based on the defaults
+     *
+     * @throws \Bgy\Mail\Template\Exception
+     * @return \Bgy\Mail\Template Provides fluent interface
+     */
+    public function setLayoutPathToDefault()
+    {
+        $layoutPath = self::getDefaultLayoutPath();
+        if (null === $layoutPath) {
+            require_once 'Bgy/Mail/Template/Exception.php';
+            throw new Template\Exception('You must set the path of the layouts');
+        }
+
+        $this->setLayoutPath($layoutPath);
+
+        return $this;
     }
 
     /**

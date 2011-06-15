@@ -21,5 +21,5 @@
 namespace Bgy\Mail\Template\Html;
 interface Renderer
 {
-    public function render();
+    public function render($html);
 }

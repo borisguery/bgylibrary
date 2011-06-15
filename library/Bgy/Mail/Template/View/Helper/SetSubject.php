@@ -27,7 +27,7 @@ class SetSubject extends \Zend_View_Helper_Abstract
     const PREPEND = 'PREPEND';
     const REPLACE = 'REPLACE';
 
-    public function setSubject($subject, $placement = self::APPEND)
+    public function setSubject($subject = '', $placement = self::APPEND)
     {
         $this->view->assign(Template::VAR_SUBJECT, $subject);
         $this->view->assign(Template::VAR_SUBJECT_PLACEMENT, strtoupper($placement));
