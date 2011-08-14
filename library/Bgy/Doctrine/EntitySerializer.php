@@ -76,7 +76,7 @@ class EntitySerializer
         foreach ($metadata->associationMappings as $field => $mapping) {
             $key = Inflector::tableize($field);
             if ($mapping['isCascadeDetach']) {
-                $data[$key] = $this->serializeEntity(
+                $data[$key] = $this->_serializeEntity(
                     $metadata->reflFields[$field]
                         ->getValue($entity)
                 );
@@ -107,7 +107,7 @@ class EntitySerializer
      */
     public function toArray($entity)
     {
-        return $this->serializeEntity($entity);
+        return $this->_serializeEntity($entity);
     }
 
 
