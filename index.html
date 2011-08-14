@@ -64,6 +64,18 @@ Guéry</a></span></h1>
               </li>
             </ul>
         </li>
+        <li><a href="#bgylib-components-doctrine-entity-serializer">\Bgy\Doctrine\EntitySerializer</a>
+            <ul>
+              <li><a href="#bgylib-components-bgy-doctrine-entity-serializer-overview">Overview</a></li>
+              <li><a href="#bgylib-components-bgy-doctrine-entity-serializer-configuration">Configuration</a></li>
+              <li><a href="#bgylib-components-bgy-doctrine-entity-serializer-usage">Usage</a>
+                <ul>
+                    <li><a href="#bgylib-components-bgy-doctrine-entity-serializer-usage-to-array">Doctrine 2 Entity toArray()</a></li>
+                    <li><a href="#bgylib-components-bgy-doctrine-entity-serializer-usage-to-json">Doctrine 2 Entity toJson()</a></li>
+                </ul>
+              </li>
+            </ul>
+        </li>
         <li><a href="#bgylib-components-bgy-filter-scheme-http">Bgy_Filter_Scheme_Http</a>
           <ul>
             <li><a href="#bgylib-components-bgy-filter-scheme-http-overview">Overview</a></li>
@@ -305,6 +317,49 @@ $config->setSQLLogger(new Firebug());
 </code></pre>
 <p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
 
+<h3 id="bgylib-components-bgy-doctrine-entity-serializer"><a href="bgylib-components-bgy-doctrine-entity-serializer">\Bgy\Doctrine\EntitySerializer</a></h3>
+<h4 id="bgylib-components-bgy-doctrine-entity-serializer"><a href="bgylib-components-bgy-doctrine-entity-serializer-overview">Overview</a></h4>
+<p><span class="classname code boc-noguttr language-php">\Bgy\Doctrine\EntitySerializer</span> is an utility inspired by the <a href="https://gist.github.com/1034079#file_serializable_entity.php">Doctrine 2 Traits preview</a> 
+from Benjamin Eberlei.</p>
+<p>Traits are currently "available" in PHP 5.4 only, I decided to write this component because I was not able to find a clever way to serialize an Entity Object to an Array.
+<br />
+We can use an Array Result as well as writing a custom hydrator, but in some case we just need to cast such object and its relationship to an Array. 
+Most solutions I found until now implemented such serialization in the Entity itself, adding then a dependency to the Entity Manager and therefore the Persistence Layer,
+which is actually one of the best improvement of Doctrine 2.<br /> 
+The idea behind this component is to be used as a Service which will be used to serialize an Entity.
+</p>
+<h4 id="bgylib-components-bgy-doctrine-entity-serializer-configuration"><a href="bgylib-components-bgy-doctrine-entity-serializer-configuration">Configuration</a></h4>
+<p>There are no configuration needed except to set up the <span class="method code boc-nogutter language-plain"><code>EntityManager</code></span>
+ using either the constructor or the <span class="method code boc-nogutter language-plain"><code>setEntityManager()</code></span> setter method.</p>
+<h4 id="bgylib-components-bgy-doctrine-entity-serializer-usage"><a href="bgylib-components-bgy-doctrine-entity-serializer-usage">Usage</a></h4>
+<h5 id="bgylib-components-bgy-doctrine-entity-serializer-usage-to-array"><a href="bgylib-components-bgy-doctrine-entity-serializer-usage-to-array">toArray()</a></h5>
+<p>
+Let's say you are using some sort of Dependency Injection and Service Locator, you will have:</p>
+<pre><code class="code language-php">
+public function getEntitySerializerService()
+{
+    if (!isset(self::$shared['entitySerializer']])) {
+        self::$shared['entitySerializer'] = new Bgy\Doctrine\EntitySerializer(
+            $this->getEntityManagerService()
+        );
+    }
+    
+    return self::$shared['entitySerializer'];
+}
+</code></pre>
+<p>Then, for example in your Controller:</p>
+<pre><code class="code language-php">
+public function toArrayAction()
+{
+    $user = $serviceLocator->getEntityManager()->find('Entity\User', 1);
+    $user = $serviceLocator->getEntitySerializer()->toArray($user);
+    
+    // Do something here
+}
+</code></pre>
+<h5 id="bgylib-components-bgy-doctrine-entity-serializer-usage-to-json"><a href="bgylib-components-bgy-doctrine-entity-serializer-usage-to-json">toJson()</a></h5>
+<p>Serialization to JSON is pretty straightfoward, it is similar to the <span class="method code boc-nogutter language-plain"><code>toArray()</code> method.</span>
+<p class="post-a-comment"><a href="#bgylib-comments">Comment</a></p>
 
 <h3 id="bgylib-components-bgy-controller-plugin-ajaxcontextdefaultformat"><a href="#bgylib-components-bgy-controller-plugin-ajaxcontextdefaultformat">Bgy_Controller_Plugin_AjaxContextDefaultFormat</a></h3>
 <h4 id="bgylib-components-bgy-controller-plugin-ajaxcontextdefaultformat-overview"><a href="#bgylib-components-bgy-controller-plugin-ajaxcontextdefaultformat-overview">Overview</a></h4>
