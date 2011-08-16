@@ -15,6 +15,7 @@
  * @author      Boris Guéry <guery.b@gmail.com>
  * @license     http://sam.zoy.org/wtfpl/COPYING
  * @link        http://borisguery.github.com/bgylibrary
+ * @see         https://gist.github.com/1034079#file_serializable_entity.php
  */
 
 namespace Bgy\Doctrine;
