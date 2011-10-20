@@ -77,10 +77,10 @@ class EntitySerializer
         foreach ($metadata->associationMappings as $field => $mapping) {
             $key = Inflector::tableize($field);
             if ($mapping['isCascadeDetach']) {
-                $data[$key] = $this->_serializeEntity(
-                    $metadata->reflFields[$field]
-                        ->getValue($entity)
-                );
+                $data[$key] = $metadata->reflFields[$field]->getValue($entity);
+                if (null !== $data[$key]) {
+                    $data[$key] = $this->_serializeEntity($data[$key]);
+                }
             } elseif ($mapping['isOwningSide'] && $mapping['type'] & ClassMetadata::TO_ONE) {
                 if (null !== $metadata->reflFields[$field]->getValue($entity)) {
                     $data[$key] = $this->getEntityManager()
