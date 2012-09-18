@@ -33,6 +33,16 @@ class EntitySerializer
      */
     protected $_em;
 
+    /**
+     * @var int
+     */
+    protected $_recursionDepth = 0;
+
+    /**
+     * @var int
+     */
+    protected $_maxRecursionDepth = 0;
+
     public function __construct($em)
     {
         $this->setEntityManager($em);
@@ -83,12 +93,21 @@ class EntitySerializer
                 }
             } elseif ($mapping['isOwningSide'] && $mapping['type'] & ClassMetadata::TO_ONE) {
                 if (null !== $metadata->reflFields[$field]->getValue($entity)) {
-                    $data[$key] = $this->getEntityManager()
-                        ->getUnitOfWork()
-                        ->getEntityIdentifier(
+                    if ($this->_recursionDepth < $this->_maxRecursionDepth) {
+                        $this->_recursionDepth++;
+                        $data[$key] = $this->_serializeEntity(
                             $metadata->reflFields[$field]
                                 ->getValue($entity)
                             );
+                        $this->_recursionDepth--;
+                    } else {
+                        $data[$key] = $this->getEntityManager()
+                            ->getUnitOfWork()
+                            ->getEntityIdentifier(
+                                $metadata->reflFields[$field]
+                                    ->getValue($entity)
+                                );
+                    }
                 } else {
                     // In some case the relationship may not exist, but we want
                     // to know about it
@@ -133,5 +152,26 @@ class EntitySerializer
     {
         throw new Exception('Not yet implemented');
     }
-}
 
+    /**
+     * Set the maximum recursion depth
+     *
+     * @param   int     $maxRecursionDepth
+     * @return  void
+     */
+    public function setMaxRecursionDepth($maxRecursionDepth)
+    {
+        $this->_maxRecursionDepth = $maxRecursionDepth;
+    }
+
+    /**
+     * Get the maximum recursion depth
+     *
+     * @return  int
+     */
+    public function getMaxRecursionDepth()
+    {
+        return $this->_maxRecursionDepth;
+    }
+
+}
